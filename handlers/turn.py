@@ -1,8 +1,8 @@
 from create_bot import dp, bot
 from aiogram.types import Message, InputFile
 from text import rulesXO
-from XOgame import get_game, set_game, set_mark, bot_pass
-from keyboards import kb_turn, kb_game
+from XOgame import get_game, set_game, set_mark, bot_pace, field
+from keyboards import kb_turn, create_game_menu
 from random import choice
 
 @dp.message_handler(commands=['да'])
@@ -36,8 +36,8 @@ async def orel_reshka(message: Message):
         photo = open('pictures/pagonya.jpg', 'rb')
         await bot.send_photo(chat_id=message.chat.id, photo=photo)
     if message.text[1:] == coin_random:
-        await bot.send_message( f'Эй, {message.from_user.first_name}! Ты ходишь первым', reply_markup=kb_game)
+        await bot.send_message( f'Эй, {message.from_user.first_name}! Ты ходишь первым', create_game_menu)
     else:
         set_mark()
-        bot_pace()
-        await bot.send_message(f'Не повезло тебе, {message.from_user.first_name}! Первым хожу я', reply_markup=kb_game)
+        bot_pace(field)
+        await bot.send_message(f'Не повезло тебе, {message.from_user.first_name}! Первый ход мой', create_game_menu)
