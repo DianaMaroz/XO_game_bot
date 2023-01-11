@@ -1,8 +1,8 @@
 from create_bot import dp
 from aiogram.types import CallbackQuery, InputMediaPhoto
-from XOgame import get_mark, field, bot_pace, check_win
+from XOgame import get_mark, field, bot_pace, check_win, check_draw
 
-from keyboards import create_game_menu,  kb_menu, stroke, kb_back
+from keyboards import create_game_menu, stroke, kb_back
 
 
 
@@ -14,32 +14,43 @@ async def game_pace(call: CallbackQuery):
     mark_pace = get_mark()
     cell = int(call.data.split(':')[-1])
     print(cell)
-    if field[cell].isdigit:
-        field[cell] = mark_pace
-        print(field)
-        if check_win():
-            photo = open('images/game.png', 'rb')
-            await dp.bot.edit_message_media(media=InputMediaPhoto(media=photo, caption="Вы выиграли!"),
-                                            chat_id=current_chat_id, message_id=current_message_id,
-                                            reply_markup=kb_back)
-        else:
-            print('ход бота')
-            bot_pace(field)
-            print(field)
-            if check_win():
-                await dp.bot.edit_message_media(
-                    media=InputMediaPhoto(media='images/krestiki-noliki.jpg', caption="Вы проиграли"),
-                    chat_id=current_chat_id, message_id=current_message_id,
-                    reply_markup=kb_back)
-            else:
-                photo = open('images/game.png', 'rb')
-                await dp.bot.edit_message_media(
-                    media=InputMediaPhoto(media=photo, caption="Я походил, теперь ваш черед"),
-                    chat_id=current_chat_id, message_id=current_message_id,
-                    reply_markup=create_game_menu())
-    else:
+    if field[cell] in ['X', 'O']:
+        photo = open('images/game.png', 'rb')
         await dp.bot.edit_message_media(
-            media=InputMediaPhoto(media='images/krestiki-noliki.jpg', caption="Это поле уже занято!"),
+            media=InputMediaPhoto(media=photo, caption="Это поле уже занято!"),
             chat_id=current_chat_id, message_id=current_message_id,
             reply_markup=create_game_menu())
+    else:
+        field[cell] = mark_pace
+        print(field)
+        if check_draw():
+            photo = open('images/game.png', 'rb')
+            await dp.bot.edit_message_media(
+                media=InputMediaPhoto(media=photo, caption="Ничья!"),
+                chat_id=current_chat_id, message_id=current_message_id,
+                reply_markup=kb_back)
+        else:
+            if check_win():
+                photo = open('images/win.png', 'rb')
+                await dp.bot.edit_message_media(media=InputMediaPhoto(media=photo, caption="Вы выиграли!"),
+                                                chat_id=current_chat_id, message_id=current_message_id,
+                                                reply_markup=kb_back)
+            else:
+                print('ход бота')
+                bot_pace(field)
+                print(field)
+                if check_win():
+                    photo = open('images/loose.jpg', 'rb')
+                    await dp.bot.edit_message_media(
+                        media=InputMediaPhoto(media=photo, caption="Вы проиграли"),
+                        chat_id=current_chat_id, message_id=current_message_id,
+                        reply_markup=kb_back)
+                else:
+                    photo = open('images/game.png', 'rb')
+                    await dp.bot.edit_message_media(
+                        media=InputMediaPhoto(media=photo, caption="Я походил, теперь ваш черед"),
+                        chat_id=current_chat_id, message_id=current_message_id,
+                        reply_markup=create_game_menu())
+
+
 

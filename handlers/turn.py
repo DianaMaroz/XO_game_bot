@@ -1,7 +1,7 @@
 from create_bot import dp, bot
 from aiogram.types import Message, InputFile
 from text import rulesXO
-from XOgame import get_game, set_game, set_mark, bot_pace, field, get_mark
+from XOgame import get_game, set_game, set_mark, bot_pace, field, get_mark, new_field
 from keyboards import kb_turn, create_game_menu
 from random import choice
 
@@ -17,6 +17,9 @@ async def com_start(message: Message):
                                 caption=f'''{name}! ОЙ, а игра уже идет! Ход менять нельзя. 
                                 Если хочешь начать с начала - пиши /start''',)
     else:
+        print(field)
+        new_field()
+        print(field)
         await dp.bot.send_photo(chat_id=chat_id,
                                 photo=photo,
                                 caption=f'{name}! {rules}',

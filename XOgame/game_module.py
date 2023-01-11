@@ -34,3 +34,19 @@ def check_win() -> bool:
         if (field[opt[0]] == field[opt[1]]  == field[opt[2]] ):
             return True
     return False
+
+def new_field():
+    global field
+    newfield = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    for i in range(9):
+        field[i] = newfield[i]
+
+
+def check_draw():
+    global field
+    for i in field:
+        if i.isdigit():
+            return False
+    if check_win():
+        return False
+    return True
