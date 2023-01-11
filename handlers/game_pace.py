@@ -24,7 +24,8 @@ async def game_pace(call: CallbackQuery):
         field[cell] = mark_pace
         print(field)
         if check_draw():
-            photo = open('images/game.png', 'rb')
+            print('draw')
+            photo = open('images/draw.jpeg', 'rb')
             await dp.bot.edit_message_media(
                 media=InputMediaPhoto(media=photo, caption="Ничья!"),
                 chat_id=current_chat_id, message_id=current_message_id,
@@ -38,19 +39,27 @@ async def game_pace(call: CallbackQuery):
             else:
                 print('ход бота')
                 bot_pace(field)
-                print(field)
-                if check_win():
-                    photo = open('images/loose.jpg', 'rb')
+                if check_draw():
+                    print('draw')
+                    photo = open('images/draw.jpeg', 'rb')
                     await dp.bot.edit_message_media(
-                        media=InputMediaPhoto(media=photo, caption="Вы проиграли"),
+                        media=InputMediaPhoto(media=photo, caption="Ничья!"),
                         chat_id=current_chat_id, message_id=current_message_id,
                         reply_markup=kb_back)
                 else:
-                    photo = open('images/game.png', 'rb')
-                    await dp.bot.edit_message_media(
-                        media=InputMediaPhoto(media=photo, caption="Я походил, теперь ваш черед"),
-                        chat_id=current_chat_id, message_id=current_message_id,
-                        reply_markup=create_game_menu())
+
+                    if check_win():
+                        photo = open('images/loose.jpg', 'rb')
+                        await dp.bot.edit_message_media(
+                            media=InputMediaPhoto(media=photo, caption="Вы проиграли"),
+                            chat_id=current_chat_id, message_id=current_message_id,
+                            reply_markup=kb_back)
+                    else:
+                        photo = open('images/game.png', 'rb')
+                        await dp.bot.edit_message_media(
+                            media=InputMediaPhoto(media=photo, caption="Я походил, теперь ваш черед"),
+                            chat_id=current_chat_id, message_id=current_message_id,
+                            reply_markup=create_game_menu())
 
 
 

@@ -8,9 +8,7 @@ from XOgame import set_game, get_game, new_field, field
 async def com_start(call: CallbackQuery):
     if get_game():
         set_game()
-    print(field)
     new_field()
-    print(field)
     photo = InputFile('images/krestiki-noliki.jpg')
     name = call.message.chat.full_name
     chat_id = call.message.chat.id
